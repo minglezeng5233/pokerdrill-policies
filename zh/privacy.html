@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>隐私政策 — PokerDrill</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <div class="container">
+    <a href="../index.html" class="back">← 返回法律中心</a>
+    <article class="article">
+      <h1>隐私政策</h1>
+      <p class="meta">最后更新：2026 年 4 月 28 日 · 生效日期：2026 年 4 月 28 日 · App 版本：1.0.136</p>
+
+      <p>本隐私政策说明 <strong>PokerDrill</strong> 移动应用程序（以下简称"本 App"、"我们"），由 <strong>曾鸣乐</strong> 运营，如何收集、使用和披露用户信息。</p>
+      <p>安装或使用本 App 即表示您同意以下做法。如不同意，请卸载本 App。</p>
+
+      <h2>1. 我们收集的信息</h2>
+
+      <h3>1.1 我们不收集的信息</h3>
+      <p>PokerDrill 以隐私优先为原则。我们 <strong>不</strong> 收集以下信息：</p>
+      <ul>
+        <li>❌ 个人身份信息（PII）：姓名、邮箱、电话号码、地址</li>
+        <li>❌ 账户凭证（无需注册、无需登录）</li>
+        <li>❌ 位置信息（GPS、Wi-Fi、蓝牙、IP 地理定位）</li>
+        <li>❌ 持久性设备标识符（IMEI、IDFA、广告 ID）</li>
+        <li>❌ 通讯录、日历、照片、麦克风、摄像头</li>
+        <li>❌ 第三方追踪 SDK 的行为分析</li>
+        <li>❌ Cookie（本 App 为原生应用，非浏览器）</li>
+      </ul>
+
+      <h3>1.2 仅存储在您设备本地的信息</h3>
+      <p>以下数据通过 React Native AsyncStorage / SQLite <strong>仅存储在您的设备上</strong>，我们永远看不到这些数据：</p>
+      <ul>
+        <li>您的手牌历史、决策、错题、GTO 评分</li>
+        <li>训练设置、偏好、语言选择</li>
+        <li>成就进度、Poker DNA 统计</li>
+        <li>App 主题与 UI 偏好</li>
+      </ul>
+
+      <h3>1.3 通过网络服务处理的信息</h3>
+      <p>为提供 AI 教练和应用内购功能，本 App 必须与以下两项服务通信：</p>
+
+      <p><strong>（a）PokerDrill 教练 API</strong>（<code>https://api.pokerdrill.app</code>）</p>
+      <ul>
+        <li><strong>发送内容：</strong>设备生成的匿名 UUID + 您请求点评的具体牌局状态（牌、位置、动作）。<strong>不附带任何个人信息</strong>。</li>
+        <li><strong>用途：</strong>调用第三方大语言模型（OpenAI gpt-4o-mini）生成 AI 点评。响应缓存 24 小时以降低成本与延迟。</li>
+        <li><strong>保留时间：</strong>缓存响应 24 小时后删除。匿名 UUID 仅用于限流，定期轮换。</li>
+        <li><strong>加密：</strong>所有请求使用 HTTPS（TLS 1.2+）。</li>
+      </ul>
+
+      <p><strong>（b）Google Play 计费</strong>（由 Google LLC 运营）</p>
+      <ul>
+        <li><strong>发送内容：</strong>您的 Google Play 账户 ID、商品 SKU（<code>pro_monthly_499</code> / <code>pro_yearly_2999</code> / <code>pro_lifetime_4999</code>）、购买令牌。</li>
+        <li><strong>用途：</strong>按照 Google Play 政策验证购买、恢复订阅、执行权益。</li>
+        <li><strong>重要：</strong>该交易适用 Google 自身的隐私政策。我们仅接收已验证的权益状态——永远不接收您的银行卡信息或完整 Google 账户。</li>
+      </ul>
+
+      <h2>2. 我们如何使用信息</h2>
+      <p>我们处理的最少数据仅用于：</p>
+      <ul>
+        <li>为您提交的特定牌局生成 AI 点评</li>
+        <li>验证您的订阅 / 终身购买</li>
+        <li>限流以防止 AI 教练 API 被滥用</li>
+        <li>聚合的匿名用量统计（如"今日服务 X 次"）用于监控服务健康</li>
+      </ul>
+
+      <h2>3. 我们如何共享信息</h2>
+      <p>我们 <strong>不</strong> 出售、出租或交易任何数据。仅在以下有限情形下披露：</p>
+      <ul>
+        <li><strong>OpenAI</strong>：牌局状态发送至 OpenAI API 生成点评（根据其商业条款，API 输入不用于训练）。</li>
+        <li><strong>Google Play / Google Cloud</strong>：用于购买验证与基础设施托管。</li>
+        <li><strong>执法机关</strong>：仅在收到合法法律程序要求时披露。</li>
+      </ul>
+
+      <h2>4. 数据保留</h2>
+      <table>
+        <tr><th>数据类型</th><th>保留期</th></tr>
+        <tr><td>设备本地手牌历史</td><td>直到您卸载或清除 App 数据</td></tr>
+        <tr><td>AI 教练 API 缓存</td><td>24 小时后删除</td></tr>
+        <tr><td>匿名限流 UUID</td><td>30 天后轮换</td></tr>
+        <tr><td>Google Play 购买记录</td><td>按 Google 政策（通常 7 年税务记录）</td></tr>
+      </table>
+
+      <h2>5. 您的权利</h2>
+      <p>由于我们不收集个人数据，以下权利在设计上已基本得到保障：</p>
+      <ul>
+        <li><strong>访问权：</strong>所有游戏数据均在您设备上，可随时在 App 内查看。</li>
+        <li><strong>删除权：</strong>卸载 App，或使用"设置 → 清除所有数据"。服务端匿名数据可通过 <a href="delete-account.html">删除表单</a> 删除。</li>
+        <li><strong>可携权：</strong>Pro 用户可在设置中以 CSV / JSON 格式导出手牌历史。</li>
+        <li><strong>反对权：</strong>可在设置中关闭 AI 教练以停止所有服务端通信。</li>
+      </ul>
+      <p>欧盟居民根据 GDPR 享有额外权利，加州居民根据 CCPA 享有额外权利，中国居民根据《个人信息保护法》享有额外权利。如需行使任何权利，请联系 <a href="mailto:support@pokerdrill.app">support@pokerdrill.app</a>。</p>
+
+      <h2>6. 儿童隐私</h2>
+      <p>PokerDrill 评级为 <strong>18 岁以上</strong>，<strong>不</strong> 面向 18 岁以下儿童。我们不会有意收集儿童任何数据。如您发现未成年人使用本 App，请联系我们，我们将删除相关数据。</p>
+
+      <h2>7. 安全</h2>
+      <p>我们采用行业标准安全措施：传输全程 HTTPS、服务端 AES 静态加密、最小权限内部访问。然而，没有任何系统能保证 100% 安全。您使用本 App 自担风险。</p>
+
+      <h2>8. 国际数据传输</h2>
+      <p>我们的后端托管于日本东京（Vultr）。OpenAI 处理在美国进行。使用本 App 即表示您同意上述传输。</p>
+
+      <h2>9. 政策变更</h2>
+      <p>我们可能不时更新本政策。顶部"最后更新"日期会反映变更。重大变更将在 App 内公告。</p>
+
+      <h2>10. 联系我们</h2>
+      <p>如有隐私问题，请联系：</p>
+      <ul>
+        <li>邮箱：<a href="mailto:support@pokerdrill.app">support@pokerdrill.app</a></li>
+        <li>运营者：曾鸣乐（中国深圳）</li>
+      </ul>
+    </article>
+    <footer>
+      <p>© 2026 PokerDrill · v1.0.136</p>
+    </footer>
+  </div>
+</body>
+</html>
