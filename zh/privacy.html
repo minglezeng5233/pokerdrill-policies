@@ -11,7 +11,7 @@
     <a href="../index.html" class="back">← 返回法律中心</a>
     <article class="article">
       <h1>隐私政策</h1>
-      <p class="meta">最后更新：2026 年 4 月 28 日 · 生效日期：2026 年 4 月 28 日 · App 版本：1.0.136</p>
+      <p class="meta">最后更新：2026 年 5 月 9 日 · 生效日期：2026 年 5 月 9 日 · App 版本：1.0.140</p>
 
       <p>本隐私政策说明 <strong>PokerDrill</strong> 移动应用程序（以下简称"本 App"、"我们"），由 <strong>曾鸣乐</strong> 运营，如何收集、使用和披露用户信息。</p>
       <p>安装或使用本 App 即表示您同意以下做法。如不同意，请卸载本 App。</p>
@@ -42,12 +42,19 @@
       <h3>1.3 通过网络服务处理的信息</h3>
       <p>为提供 AI 教练和应用内购功能，本 App 必须与以下两项服务通信：</p>
 
-      <p><strong>（a）PokerDrill 教练 API</strong>（<code>https://api.pokerdrill.app</code>）</p>
+      <p><strong>（a）PokerDrill 教练 API</strong>（<code>https://api.pokerdrill.app</code>，部署于 Cloudflare Workers 全球边缘网络）</p>
       <ul>
-        <li><strong>发送内容：</strong>设备生成的匿名 UUID + 您请求点评的具体牌局状态（牌、位置、动作）。<strong>不附带任何个人信息</strong>。</li>
-        <li><strong>用途：</strong>调用第三方大语言模型（OpenAI gpt-4o-mini）生成 AI 点评。响应缓存 24 小时以降低成本与延迟。</li>
-        <li><strong>保留时间：</strong>缓存响应 24 小时后删除。匿名 UUID 仅用于限流，定期轮换。</li>
-        <li><strong>加密：</strong>所有请求使用 HTTPS（TLS 1.2+）。</li>
+        <li><strong>发送内容：</strong>设备生成的匿名 UUID（经 SHA-256 加盐哈希）+ 您请求点评的<strong>已脱敏的牌局摘要</strong>（手位、对手位、动作序列 fold/call/raise、底池倍数、GTO 推荐动作、EV 损失数值、阻断牌组合）。<strong>不附带</strong>任何 PII、邮箱、设备真实 ID、IP、账户余额、支付信息。</li>
+        <li><strong>用途（v1.0.140 起）：</strong>由 PokerDrill 自有后端中转至第三方大语言模型 <strong>DeepSeek-Chat</strong>（深度求索人工智能基础技术研究有限公司，中国杭州）生成 AI 点评。<strong>不</strong>再使用 OpenAI / Gemini。
+          <ul>
+            <li>DeepSeek 服务条款：<a href="https://platform.deepseek.com/downloads/DeepSeek+Terms+of+Use.html" target="_blank" rel="noopener">platform.deepseek.com</a></li>
+            <li>DeepSeek 隐私政策：<a href="https://cdn.deepseek.com/policies/zh-CN/deepseek-privacy-policy.html" target="_blank" rel="noopener">cdn.deepseek.com</a></li>
+            <li>根据 DeepSeek API 商业条款，您的 API 输入<strong>不</strong>用于训练其模型。</li>
+          </ul>
+        </li>
+        <li><strong>保留时间：</strong>请求响应缓存 24 小时（用于相同手牌复用以节约请求与降低延迟），过期自动删除。匿名 UUID 仅用于按 IP 限流（30 次 / 天 / IP），定期轮换。</li>
+        <li><strong>加密：</strong>客户端 ↔ Cloudflare Workers 使用 HTTPS（TLS 1.3）；Workers ↔ DeepSeek API 使用 HTTPS。</li>
+        <li><strong>用户控制：</strong>在"设置 → AI 教练"中可一键关闭，关闭后所有 LLM 请求<strong>不会</strong>发出，仅使用本地 GTO 规则引擎。</li>
       </ul>
 
       <p><strong>（b）Google Play 计费</strong>（由 Google LLC 运营）</p>
@@ -69,8 +76,9 @@
       <h2>3. 我们如何共享信息</h2>
       <p>我们 <strong>不</strong> 出售、出租或交易任何数据。仅在以下有限情形下披露：</p>
       <ul>
-        <li><strong>OpenAI</strong>：牌局状态发送至 OpenAI API 生成点评（根据其商业条款，API 输入不用于训练）。</li>
-        <li><strong>Google Play / Google Cloud</strong>：用于购买验证与基础设施托管。</li>
+        <li><strong>DeepSeek（中国杭州）</strong>：脱敏的牌局摘要发送至 DeepSeek API 生成点评（根据其商业条款，API 输入不用于训练）。<em>v1.0.140 起替代了原 OpenAI 服务。</em></li>
+        <li><strong>Cloudflare（全球 CDN）</strong>：作为后端运行平台（Workers + D1 数据库）以及前端 CDN 加速。Cloudflare 不存储您的牌局内容，仅作为传输管道。</li>
+        <li><strong>Google Play</strong>：用于购买验证。</li>
         <li><strong>执法机关</strong>：仅在收到合法法律程序要求时披露。</li>
       </ul>
 
@@ -78,8 +86,10 @@
       <table>
         <tr><th>数据类型</th><th>保留期</th></tr>
         <tr><td>设备本地手牌历史</td><td>直到您卸载或清除 App 数据</td></tr>
-        <tr><td>AI 教练 API 缓存</td><td>24 小时后删除</td></tr>
-        <tr><td>匿名限流 UUID</td><td>30 天后轮换</td></tr>
+        <tr><td>AI 教练 API 缓存（Cloudflare D1）</td><td>24 小时后自动删除</td></tr>
+        <tr><td>匿名限流计数（按 IP）</td><td>每日午夜（UTC）重置</td></tr>
+        <tr><td>Trial 试用授予记录</td><td>14 天试用期结束后保留 30 天用于防作弊，之后删除</td></tr>
+        <tr><td>DeepSeek 端的输入</td><td>按 DeepSeek 隐私政策（一般不超过 30 天）</td></tr>
         <tr><td>Google Play 购买记录</td><td>按 Google 政策（通常 7 年税务记录）</td></tr>
       </table>
 
@@ -100,7 +110,13 @@
       <p>我们采用行业标准安全措施：传输全程 HTTPS、服务端 AES 静态加密、最小权限内部访问。然而，没有任何系统能保证 100% 安全。您使用本 App 自担风险。</p>
 
       <h2>8. 国际数据传输</h2>
-      <p>我们的后端托管于日本东京（Vultr）。OpenAI 处理在美国进行。使用本 App 即表示您同意上述传输。</p>
+      <p>v1.0.140 起，我们的基础设施已全部迁移至更稳定可控的架构：</p>
+      <ul>
+        <li><strong>后端 API（api.pokerdrill.app）</strong>：部署于 Cloudflare Workers 全球边缘网络，请求由地理位置最近的节点处理（中国大陆用户通常由香港 / 东京 / 新加坡节点服务）。</li>
+        <li><strong>数据库（Cloudflare D1）</strong>：主区域为 APAC（亚太），符合中国大陆用户的数据本地化偏好。</li>
+        <li><strong>AI 模型（DeepSeek-Chat）</strong>：处理在中国大陆境内进行（深圳）。</li>
+      </ul>
+      <p>使用本 App 即表示您同意上述跨节点 / 跨区域传输。如您是欧盟居民，根据 GDPR Art. 4，因本 App 不传输任何 PII，仅传输脱敏的游戏数据，<strong>不构成"个人数据跨境传输"</strong>。</p>
 
       <h2>9. 政策变更</h2>
       <p>我们可能不时更新本政策。顶部"最后更新"日期会反映变更。重大变更将在 App 内公告。</p>
@@ -113,7 +129,7 @@
       </ul>
     </article>
     <footer>
-      <p>© 2026 PokerDrill · v1.0.136</p>
+      <p>© 2026 PokerDrill · v1.0.140</p>
     </footer>
   </div>
 </body>

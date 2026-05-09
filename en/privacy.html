@@ -11,7 +11,7 @@
     <a href="../index.html" class="back">← Back to Legal Center</a>
     <article class="article">
       <h1>Privacy Policy</h1>
-      <p class="meta">Last Updated: April 28, 2026 · Effective Date: April 28, 2026 · App Version: 1.0.136</p>
+      <p class="meta">Last Updated: May 9, 2026 · Effective Date: May 9, 2026 · App Version: 1.0.140</p>
 
       <p>This Privacy Policy describes how the <strong>PokerDrill</strong> mobile application (the "App", "we", "us"), operated by <strong>Mingle Zeng</strong>, collects, uses, and discloses information about its users.</p>
       <p>By installing or using the App, you agree to the practices described below. If you do not agree, please uninstall the App.</p>
@@ -42,12 +42,19 @@
       <h3>1.3 Information We Process via Network Services</h3>
       <p>For the AI Coach feature and In-App Purchases, the App must communicate with two services:</p>
 
-      <p><strong>(a) PokerDrill Coach API</strong> (<code>https://api.pokerdrill.app</code>)</p>
+      <p><strong>(a) PokerDrill Coach API</strong> (<code>https://api.pokerdrill.app</code>, deployed on Cloudflare Workers global edge network)</p>
       <ul>
-        <li><strong>What is sent:</strong> An anonymous device-generated UUID + the specific poker hand state (cards, position, action) you ask the AI to review. <strong>No personal information is attached.</strong></li>
-        <li><strong>Why:</strong> To generate AI coaching commentary using a third-party LLM (OpenAI gpt-4o-mini). Responses are cached for 24 hours to reduce cost and latency.</li>
-        <li><strong>How long:</strong> Cached responses are deleted after 24 hours. The anonymous UUID is used solely for rate limiting and is rotated periodically.</li>
-        <li><strong>Encryption:</strong> All requests use HTTPS (TLS 1.2+).</li>
+        <li><strong>What is sent:</strong> A salted SHA-256 hash of an anonymous device-generated UUID + a <strong>de-identified hand summary</strong> (hero position, villain position, action sequence fold/call/raise, pot ratios, GTO recommended action, EV loss value, blocker combos). <strong>No PII, email, real device ID, IP, account balance, or payment information is attached.</strong></li>
+        <li><strong>Why (as of v1.0.140):</strong> Relayed via PokerDrill's own backend to a third-party LLM, <strong>DeepSeek-Chat</strong> (Hangzhou DeepSeek AI Foundation Tech Research Co., Ltd., Hangzhou, China), to generate coaching commentary. <strong>OpenAI / Gemini are no longer used.</strong>
+          <ul>
+            <li>DeepSeek Terms of Use: <a href="https://platform.deepseek.com/downloads/DeepSeek+Terms+of+Use.html" target="_blank" rel="noopener">platform.deepseek.com</a></li>
+            <li>DeepSeek Privacy Policy: <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html" target="_blank" rel="noopener">cdn.deepseek.com</a></li>
+            <li>Per DeepSeek API commercial terms, your API inputs are <strong>not used to train</strong> their models.</li>
+          </ul>
+        </li>
+        <li><strong>How long:</strong> Request responses are cached for 24 hours (to deduplicate identical hands and reduce latency / cost), then deleted automatically. The anonymous UUID hash is used solely for per-IP rate limiting (30 req / day / IP) and is rotated periodically.</li>
+        <li><strong>Encryption:</strong> Client ↔ Cloudflare Workers via HTTPS (TLS 1.3); Workers ↔ DeepSeek API via HTTPS.</li>
+        <li><strong>User control:</strong> You can disable AI Coach in <em>Settings → AI Coach</em>. When disabled, <strong>no LLM requests are sent</strong>; only the local GTO rule engine is used.</li>
       </ul>
 
       <p><strong>(b) Google Play Billing</strong> (operated by Google LLC)</p>
@@ -69,8 +76,9 @@
       <h2>3. How We Share Information</h2>
       <p>We do <strong>NOT</strong> sell, rent, or trade any data. Limited disclosures occur only to:</p>
       <ul>
-        <li><strong>OpenAI</strong>: Hand state is sent to OpenAI's API to generate the coaching response (their API does not retain inputs for training per their commercial terms).</li>
-        <li><strong>Google Play / Google Cloud</strong>: For purchase verification and infrastructure hosting.</li>
+        <li><strong>DeepSeek (Hangzhou, China)</strong>: De-identified hand summaries are sent to DeepSeek's API to generate the coaching response (per their commercial terms, API inputs are not retained for training). <em>This replaces OpenAI as of v1.0.140.</em></li>
+        <li><strong>Cloudflare (global CDN)</strong>: As the backend runtime (Workers + D1 database) and frontend CDN. Cloudflare does not store your hand content; it acts only as a transmission pipeline.</li>
+        <li><strong>Google Play</strong>: For purchase verification.</li>
         <li><strong>Law enforcement</strong>: Only if compelled by valid legal process.</li>
       </ul>
 
@@ -78,8 +86,10 @@
       <table>
         <tr><th>Data Type</th><th>Retention</th></tr>
         <tr><td>On-device hand history</td><td>Until you uninstall or clear app data</td></tr>
-        <tr><td>AI Coach API cache</td><td>24 hours, then deleted</td></tr>
-        <tr><td>Anonymous rate-limit UUID</td><td>30 days, then rotated</td></tr>
+        <tr><td>AI Coach API cache (Cloudflare D1)</td><td>24 hours, then auto-deleted</td></tr>
+        <tr><td>Anonymous per-IP rate-limit counter</td><td>Reset daily at midnight UTC</td></tr>
+        <tr><td>Trial entitlement records</td><td>30 days after the 14-day trial ends, for fraud prevention; then deleted</td></tr>
+        <tr><td>Inputs on DeepSeek's side</td><td>Per DeepSeek's privacy policy (typically not exceeding 30 days)</td></tr>
         <tr><td>Google Play purchase records</td><td>Per Google's policy (typically 7 years for tax)</td></tr>
       </table>
 
@@ -100,7 +110,13 @@
       <p>We use industry-standard security: HTTPS for all transit, AES encryption at rest on the server, and the principle of least privilege for all internal access. However, no system is 100% secure. You use the App at your own risk.</p>
 
       <h2>8. International Transfers</h2>
-      <p>Our backend is hosted in Tokyo, Japan (Vultr). OpenAI processing occurs in the United States. By using the App, you consent to these transfers.</p>
+      <p>As of v1.0.140, our infrastructure has been migrated to a more stable, controllable architecture:</p>
+      <ul>
+        <li><strong>Backend API (api.pokerdrill.app)</strong>: Deployed on Cloudflare Workers global edge network. Requests are served by the geographically closest edge node (mainland China users are typically served by Hong Kong / Tokyo / Singapore nodes).</li>
+        <li><strong>Database (Cloudflare D1)</strong>: Primary region is APAC, in line with mainland China users' data localization preferences.</li>
+        <li><strong>AI model (DeepSeek-Chat)</strong>: Processing occurs within mainland China (Hangzhou).</li>
+      </ul>
+      <p>By using the App, you consent to these cross-node / cross-region transfers. For EU residents under GDPR Art. 4: because the App transmits no PII and only de-identified gameplay data, this <strong>does not constitute a "transfer of personal data"</strong>.</p>
 
       <h2>9. Changes to This Policy</h2>
       <p>We may update this Policy from time to time. The "Last Updated" date at the top will reflect any changes. Material changes will be announced in-app.</p>
@@ -113,7 +129,7 @@
       </ul>
     </article>
     <footer>
-      <p>© 2026 PokerDrill · v1.0.136</p>
+      <p>© 2026 PokerDrill · v1.0.140</p>
     </footer>
   </div>
 </body>
