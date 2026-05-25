@@ -1,11 +1,11 @@
-# PokerDrill Policies Site — GitHub Pages 部署指南
+# HolyGTO Policies Site — GitHub Pages 部署指南
 
 > 这是一个**完全静态**的政策站点，可一键部署到 GitHub Pages（永久免费）或 Cloudflare Pages。
 
 ## 📁 文件结构
 
 ```
-pokerdrill-policies-site/
+holygto-policies-site/
 ├── index.html              # 法律中心入口（中英导航）
 ├── README.md               # 本文件
 ├── assets/
@@ -26,16 +26,16 @@ pokerdrill-policies-site/
 
 ### Step 1：创建仓库
 ```bash
-# 1. 在 GitHub 网页端创建一个新公开仓库，名字: pokerdrill-policies
+# 1. 在 GitHub 网页端创建一个新公开仓库，名字: holygto-policies
 #    (用户：minglezeng5233)
 
 # 2. 本地初始化
-cd docs/pokerdrill-policies-site
+cd docs/holygto-policies-site
 git init
 git add .
-git commit -m "Initial: PokerDrill v1.0.136 policy site"
+git commit -m "Initial: HolyGTO v1.0.136 policy site"
 git branch -M main
-git remote add origin https://github.com/minglezeng5233/pokerdrill-policies.git
+git remote add origin https://github.com/minglezeng5233/holygto-policies.git
 git push -u origin main
 ```
 
@@ -46,13 +46,13 @@ git push -u origin main
 4. 1-2 分钟后访问：
 
 ```
-✅ 法律中心:        https://minglezeng5233.github.io/pokerdrill-policies/
-✅ 英文隐私政策:    https://minglezeng5233.github.io/pokerdrill-policies/en/privacy.html
-✅ 英文服务条款:    https://minglezeng5233.github.io/pokerdrill-policies/en/terms.html
-✅ 英文删除账号:    https://minglezeng5233.github.io/pokerdrill-policies/en/delete-account.html
-✅ 中文隐私政策:    https://minglezeng5233.github.io/pokerdrill-policies/zh/privacy.html
-✅ 中文服务条款:    https://minglezeng5233.github.io/pokerdrill-policies/zh/terms.html
-✅ 中文删除账号:    https://minglezeng5233.github.io/pokerdrill-policies/zh/delete-account.html
+✅ 法律中心:        https://minglezeng5233.github.io/holygto-policies/
+✅ 英文隐私政策:    https://minglezeng5233.github.io/holygto-policies/en/privacy.html
+✅ 英文服务条款:    https://minglezeng5233.github.io/holygto-policies/en/terms.html
+✅ 英文删除账号:    https://minglezeng5233.github.io/holygto-policies/en/delete-account.html
+✅ 中文隐私政策:    https://minglezeng5233.github.io/holygto-policies/zh/privacy.html
+✅ 中文服务条款:    https://minglezeng5233.github.io/holygto-policies/zh/terms.html
+✅ 中文删除账号:    https://minglezeng5233.github.io/holygto-policies/zh/delete-account.html
 ```
 
 **这些链接立即可用于 Play Console 提交**，无需买域名。
@@ -61,30 +61,30 @@ git push -u origin main
 
 ## 🌐 部署方案 B：Cloudflare Pages + 自有域名（专业）
 
-### 前提：买域名 pokerdrill.app
+### 前提：买域名 holygto.app
 - 推荐 [Cloudflare Registrar](https://www.cloudflare.com/products/registrar/)：约 \$11/年，无加价
 - 或 [Namecheap](https://www.namecheap.com/)：首年 \$2，续费 \$13
 
 ### Step 1：连接 Cloudflare Pages
 1. 登录 [Cloudflare](https://dash.cloudflare.com) → Workers & Pages → Create → **Pages** → Connect to Git
-2. 选择你的 `pokerdrill-policies` 仓库
+2. 选择你的 `holygto-policies` 仓库
 3. 构建设置：
    - Framework preset: **None**
    - Build command: 留空
    - Build output directory: `/`
-4. **Save and Deploy** → 几秒后给个 `pokerdrill-policies.pages.dev` 临时域名
+4. **Save and Deploy** → 几秒后给个 `holygto-policies.pages.dev` 临时域名
 
-### Step 2：绑定 pokerdrill.app
+### Step 2：绑定 holygto.app
 1. Pages 项目 → **Custom domains** → **Set up a custom domain**
-2. 输入 `www.pokerdrill.app`（推荐 www）→ 自动添加 CNAME → 1 分钟生效
-3. （可选）再加 `pokerdrill.app` 裸域，自动 301 到 www
+2. 输入 `www.holygto.app`（推荐 www）→ 自动添加 CNAME → 1 分钟生效
+3. （可选）再加 `holygto.app` 裸域，自动 301 到 www
 
 ### Step 3：最终 URL
 ```
-✅ 法律中心:        https://www.pokerdrill.app/
-✅ 英文隐私政策:    https://www.pokerdrill.app/en/privacy.html
-✅ 英文删除账号:    https://www.pokerdrill.app/en/delete-account.html
-✅ 中文隐私政策:    https://www.pokerdrill.app/zh/privacy.html
+✅ 法律中心:        https://www.holygto.app/
+✅ 英文隐私政策:    https://www.holygto.app/en/privacy.html
+✅ 英文删除账号:    https://www.holygto.app/en/delete-account.html
+✅ 中文隐私政策:    https://www.holygto.app/zh/privacy.html
 （其他类推）
 ```
 
@@ -96,7 +96,7 @@ git push -u origin main
 /delete-account /en/delete-account.html 302
 /隐私政策       /zh/privacy.html        302
 ```
-让 `pokerdrill.app/privacy` 自动跳到 `/en/privacy.html`，对 Google Play 表单填写更清爽。
+让 `holygto.app/privacy` 自动跳到 `/en/privacy.html`，对 Google Play 表单填写更清爽。
 
 ---
 
@@ -104,9 +104,9 @@ git push -u origin main
 
 | Play Console 字段 | 推荐填的 URL（域名版） | 临时备选（GitHub Pages 版） |
 |---|---|---|
-| Privacy policy URL | `https://www.pokerdrill.app/en/privacy.html` | `https://minglezeng5233.github.io/pokerdrill-policies/en/privacy.html` |
-| Account deletion URL（Data safety） | `https://www.pokerdrill.app/en/delete-account.html` | `https://minglezeng5233.github.io/pokerdrill-policies/en/delete-account.html` |
-| Terms of service（可选 in-app） | `https://www.pokerdrill.app/en/terms.html` | `https://minglezeng5233.github.io/pokerdrill-policies/en/terms.html` |
+| Privacy policy URL | `https://www.holygto.app/en/privacy.html` | `https://minglezeng5233.github.io/holygto-policies/en/privacy.html` |
+| Account deletion URL（Data safety） | `https://www.holygto.app/en/delete-account.html` | `https://minglezeng5233.github.io/holygto-policies/en/delete-account.html` |
+| Terms of service（可选 in-app） | `https://www.holygto.app/en/terms.html` | `https://minglezeng5233.github.io/holygto-policies/en/terms.html` |
 
 ---
 
@@ -140,7 +140,7 @@ git push -u origin main
 
 ## 📝 已知后续工作
 
-- [ ] **必做**：买域名 `pokerdrill.app` 并绑定（避免审核员看到 `github.io` 觉得不正规）
+- [ ] **必做**：买域名 `holygto.app` 并绑定（避免审核员看到 `github.io` 觉得不正规）
 - [ ] **可选**：加一个简单的 GitHub Issue Template 让用户也能在 Issue 区申请删除
 - [ ] **可选**：加多语言切换器（顶部按钮 EN / 中文）
-- [ ] **可选**：在 PokerDrill App 内 `app/legal/privacy.tsx` 同步加链接到本站点
+- [ ] **可选**：在 HolyGTO App 内 `app/legal/privacy.tsx` 同步加链接到本站点
